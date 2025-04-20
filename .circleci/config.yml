@@ -36,12 +36,12 @@ jobs:
       - run:
           name: Build Docker Image
           command: |
-            docker build -t DOCKER_USER/container-assignment:latest .
+            docker build -t $DOCKER_USER/container-assignment:latest .
       - run:
           name: Push Docker Image
           command: |
-            docker login -u DOCKER_USER -p DOCKER_TOKEN
-            docker push DOCKER_USER/container-assignment:latest
+            docker login -u $DOCKER_USER -p $DOCKER_TOKEN
+            docker push $DOCKER_USER/container-assignment:latest
 
 
 workflows:
