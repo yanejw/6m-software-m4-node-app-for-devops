@@ -32,11 +32,17 @@ jobs:
       - image: cimg/node:16.10
     steps:
       - checkout
-      - docker/publish:
-          image: $DOCKER_USER/container-assignment
-          tag: latest
-          username: $DOCKER_USER
-          password: $DOCKER_TOKEN
+      - setup_remote_docker
+      - run:
+          name: Build Docker Image
+          command: |
+            docker build -t $DOCKER_USER/container-assignment:latest .
+      - run:
+          name: Push Docker Image
+          command: |
+            docker login -u $DOCKER_USER -p $DOCKER_TOKEN
+            docker push $DOCKER_USER/container-assignment:latest
+
 
 workflows:
   build-and-push:
