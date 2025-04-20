@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   node: circleci/node@5.0.1
+  docker: circleci/docker@2.4.0
 
 jobs:
   build:
@@ -26,13 +27,24 @@ jobs:
           echo "Running tests..."
           npm run test
 
+  push:
+    docker:
+      - image: cimg/node:16.10
+    steps:
+      - checkout
+      - docker/publish:
+          image: $DOCKER_USER/container-assignment
+          tag: latest
+          username: $DOCKER_USER
+          password: $DOCKER_TOKEN
+
 workflows:
-  simple_workflow:
+  build-and-push:
     jobs:
       - build
       - test:
           requires:
             - build
-
-
-executor: docker/docker
+      - push:
+          requires:
+            - test
